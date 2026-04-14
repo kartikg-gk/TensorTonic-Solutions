@@ -6,16 +6,22 @@ def create_embedding_layer(vocab_size: int, d_model: int) -> nn.Embedding:
     """
     Create an embedding layer.
     """
-    embedding = nn.Embedding(vocab_size, d_model)
-    nn.init.normal(embedding.weight, mean =0.0, std =1.0) / math.sqrt(d_model)
-
+    embedding = nn.Embedding(
+        num_embeddings=vocab_size,
+        embedding_dim=d_model
+    )
     return embedding
 
-def embed_tokens(embedding: nn.Embedding, tokens: torch.Tensor, d_model: int) -> torch.Tensor:
+
+def embed_tokens(
+    embedding: nn.Embedding,
+    tokens: torch.Tensor,
+    d_model: int
+) -> torch.Tensor:
     """
     Convert token indices to scaled embeddings.
     """
-    raw_embeddings = embedding(tokens)
-    scaled_embeddings = raw_embeddings * math.sqrt(d_model)
+    embedded = embedding(tokens)
+    embedded = embedded * math.sqrt(d_model)
 
-    return scaled_embeddings
+    return embedded
